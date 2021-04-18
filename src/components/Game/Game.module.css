@@ -1,0 +1,66 @@
+.gamePage {
+    margin: 10px;
+}
+
+.homeContainer {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.gameWelcome {
+    font-size: 30px;
+}
+
+.playerNameRow {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.node {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    outline: 1px solid rgba(144, 175, 175, 0.75);
+    display: inline-block;
+}
+
+.gridRow {
+    line-height: 0;
+}
+
+.fleetBlock {
+    border: 1px solid #989898;
+    margin: 5px;
+    display: inline-flex;
+}
+
+.ship {
+    background: blue;
+}
+
+.miss {
+    background: pink;
+}
+
+.hit {
+    background: green;
+}
+
+.fleetTitle {
+    margin: 20px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.fleetBlockContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.myPlayerContainer {
+    margin-top: 15px;
+}

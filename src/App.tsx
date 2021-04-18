@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useCallback } from 'react';
+import { Game, GameEntity } from './models/Game';
+import { GameComponent } from './components/Game/Game'
+
+import 'antd/dist/antd.css'; 
 import './App.css';
 
+// TODO: Structure translations across app with i18n
 function App() {
+  const game = new Game()
+  const [mode, setMode] = useState(game.mode)
+  const [entities, setEntities] = useState(game.entities)
+  const [turn, setTurn] = useState(game.turn)
+
+  const updateEntities = useCallback((updatedEntities: GameEntity[]) => {
+    setEntities(updatedEntities)
+  }, [])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GameComponent
+        mode={mode}
+        entities={entities}
+        turn={turn}
+        onModeChange={setMode}
+        onEntitiesChange={updateEntities}
+        onTurnChange={setTurn}
+      />
     </div>
   );
 }
