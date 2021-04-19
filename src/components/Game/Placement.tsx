@@ -18,12 +18,9 @@ const renderFleet = (fleet: Fleet, index: number, setDraggedFleet: Function) => 
         height *= fleet.size
     }
 
-    return (
-        <>
-            {index % 4 === 0 && <br />}
-            <div key={index} className={styles.fleetBlock} style={{height, width}} draggable={true} onDragStart={() => setDraggedFleet(index)} />
-        </>
-    )
+    return !fleet.placed ? (
+        <div key={index} className={styles.fleetBlock} style={{height, width}} draggable={true} onDragStart={() => setDraggedFleet(index)} />
+    ) : null
 }
 
 export const Placement = (props: GameProps) => {
@@ -32,15 +29,15 @@ export const Placement = (props: GameProps) => {
     const [draggedFleet, setDraggedFleet] = useState(-1)
 
     const handleDrag = (columnId: number, rowId: number) => {
-        const matchingFleet = getMatchingFleets(entity.fleets, columnId, rowId)
-        if (matchingFleet && matchingFleet.length) {
+        const fleetAtGivenCoords = getMatchingFleets(entity.fleets, columnId, rowId)
+        if (fleetAtGivenCoords && fleetAtGivenCoords.length) {
             return
         }
 
-        const targetFleet = entity.fleets[draggedFleet]
+        const fleetDropped = entity.fleets[draggedFleet]
         const canPlaceFleet = canPlaceFleetAtPosition(
             entity.fleets,
-            targetFleet,
+            fleetDropped,
             columnId,
             rowId,
             entity.batteground.getLength(),
@@ -51,20 +48,15 @@ export const Placement = (props: GameProps) => {
             return
         }
 
-        targetFleet.setPosition(columnId, rowId)
-        const fleetBlocks = targetFleet.getFleetBlocks()
+        fleetDropped.setPosition(columnId, rowId)
         
-        fleetBlocks.forEach(([fleetx, fleety]) => {
-            entity.batteground.setCellState(fleetx, fleety, CellState.FLEET)
-        })
+        fleetDropped.getFleetBlocks().forEach(([fleetx, fleety]) =>
+            entity.batteground.setCellState(fleetx, fleety, CellState.FLEET))
         
-        props.onEntitiesChange(props.entities.map((e, eIndex) => {
-            e.fleets = e.fleets.filter((_, index) => props.turn !== eIndex || index !== draggedFleet)
-            return {...e}
-        }))
+        props.onEntitiesChange(props.entities.map(e => ({...e})))
     }
 
-    const playersLeftToSetFleet = props.turn < props.entities.length - 1
+    const haveAllPlayersSetFleets = props.turn >= props.entities.length - 1
 
     return (
         <>
@@ -85,12 +77,10 @@ export const Placement = (props: GameProps) => {
                 {entity.fleets.map((fleet, index) => renderFleet(fleet, index, setDraggedFleet))}
             </div>
 
-            
-
-            {playersLeftToSetFleet ? (
-                <Button type="primary" disabled={entity.fleets.length > 0} onClick={() => props.onTurnChange(props.turn + 1)}>Move to next player</Button>
+            {!haveAllPlayersSetFleets ? (
+                <Button type="primary" disabled={!entity.fleets.every(f => f.placed)} onClick={() => props.onTurnChange(1 - props.turn)}>Move to next player</Button>
             ) : (
-                <Button type="primary" disabled={entity.fleets.length > 0} onClick={() => {
+                <Button type="primary" disabled={!entity.fleets.every(f => f.placed)} onClick={() => {
                     props.onModeChange(GameMode.LIVE)
                     props.onTurnChange(0)
                 }}>Start Game</Button>

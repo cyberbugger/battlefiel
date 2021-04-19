@@ -3,11 +3,11 @@ import { Fleet } from "../models/Fleet"
 
 const fleetConfig: FleetConfig[] = [{
     direction: FleetDirection.HORIZONTAL,
-    sizes: [1, 2, 3, 4]
+    sizes: [2]//, 2, 3, 4]
 },
 {
     direction: FleetDirection.VERTICAL,
-    sizes: [1, 2, 3, 4]
+    sizes: [1, 2]//, 3, 4]
 }
 ]
 
@@ -34,19 +34,31 @@ export const canPlaceFleetAtPosition = (fleets: Fleet[], targetFleet: Fleet, tar
         .flat()
 
     const targetCoords = getFleetBlocks(targetXPos, targetYPos, targetFleet.size, targetFleet.direction)
+
+    let hasInvalidTargetCoords = false
     targetCoords.forEach(([targetx, targety]) => {
         if (targetx >= gridWidth || targety >= gridHeight) {
-            return false
+            hasInvalidTargetCoords = true
         }
     })
 
+    if (hasInvalidTargetCoords) {
+        return false
+    }
+
+    let hasConflictingFleetBlock = false
     for (let i = 0; i < fleetBlocks.length; i++) {
         const [xPos, yPos] = fleetBlocks[i]
+
         targetCoords.forEach(([targetx, targety]) => {
             if (xPos === targetx && yPos === targety) {
-                return false
+                hasConflictingFleetBlock = true
             }
         })
+    }
+
+    if (hasConflictingFleetBlock) {
+        return false
     }
 
     return true
@@ -82,14 +94,12 @@ export const getFleetBlocks = (xPos: number, yPos: number, size: number, directi
     if (direction === FleetDirection.HORIZONTAL) {
         let i = 0
         while (i < size - 1) {
-            i++
-            allBlocks.push([xPos, yPos+i])
+            allBlocks.push([xPos, yPos+(++i)])
         }
     } else if (direction === FleetDirection.VERTICAL) {
         let i = 0
         while (i < size - 1) {
-            i++
-            allBlocks.push([xPos+i, yPos])
+            allBlocks.push([xPos+(++i), yPos])
         }
     }
 

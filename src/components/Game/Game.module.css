@@ -64,3 +64,18 @@
 .myPlayerContainer {
     margin-top: 15px;
 }
+
+.indicators {
+    margin-top: 15px;
+    line-height: 30px;
+    display: inline-flex;
+}
+
+.indicators > div {
+    margin-right: 5px;
+    margin-left: 20px;
+}
+
+.break {
+    display: block;
+}

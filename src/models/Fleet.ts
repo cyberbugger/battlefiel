@@ -6,17 +6,20 @@ export class Fleet {
     yPosition: number
     direction: FleetDirection
     size: number
+    placed: boolean
 
     constructor(direction: FleetDirection, size: number) {
         this.xPosition = POSITION_NOT_SET
         this.yPosition = POSITION_NOT_SET
         this.direction = direction
         this.size = size
+        this.placed = false
     }
 
     setPosition(xPosition: number, yPosition: number) {
         this.xPosition = xPosition
         this.yPosition = yPosition
+        this.placed = true
     }
 
     getFleetBlocks = () => {
