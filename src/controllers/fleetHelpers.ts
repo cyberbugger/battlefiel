@@ -3,11 +3,11 @@ import { Fleet } from "../models/Fleet"
 
 const fleetConfig: FleetConfig[] = [{
     direction: FleetDirection.HORIZONTAL,
-    sizes: [2]//, 2, 3, 4]
+    sizes: [1, 2, 3, 4]
 },
 {
     direction: FleetDirection.VERTICAL,
-    sizes: [1, 2]//, 3, 4]
+    sizes: [1, 2, 3, 4]
 }
 ]
 
